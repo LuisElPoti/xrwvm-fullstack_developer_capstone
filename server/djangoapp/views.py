@@ -1,10 +1,8 @@
 # Uncomment the required imports before adding the code
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
-from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 import logging
 import json
@@ -59,7 +57,7 @@ def registration(request):
         first_name = data.get('firstName', '')
         last_name = data.get('lastName', '')
         email = data.get('email', '')
-        
+
         username_exist = User.objects.filter(username=username).exists()
         if not username_exist:
             user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, password=password, email=email)
@@ -108,6 +106,7 @@ def add_review(request):
             data = json.loads(request.body)
             try:
                 response = post_review(data)
+                print(response)
                 return JsonResponse({"status": 200})
             except Exception as e:
                 return JsonResponse({"status": 401, "message": f"Error in posting review: {e}"})
